@@ -1,0 +1,13 @@
+ErrorDocument 404 /404.php
+
+RewriteEngine on
+
+
+RewriteRule ^Home$ index.php [NE,L]
+RewriteRule ^Student-Login$ student_login.php [NE,L]
+RewriteRule ^Student-Registration$ student_registration.php [NE,L]
+RewriteRule ^Verify-Student$ student_verify_email.php [NE,L]
+
+
+
+RewriteRule ^Insert$ insert.php [NE,L]
