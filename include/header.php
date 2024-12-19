@@ -211,8 +211,18 @@
                     </div>
                     <div class="header-right-area-one">
                         <div class="buttons-area">
-                            <a href="Student-Login" class="rts-btn btn-border">Student Login</a>
-                            <a href="Teacher-Login" class="rts-btn btn-primary">Teacher Login</a>
+                            <?php
+                            if(isset($_SESSION['teacher_id'])){
+                                ?>
+                                <a href="Logout" class="rts-btn btn-primary">Logout</a>
+                                <?php
+                            } else{
+                                ?>
+                                <a href="Student-Login" class="rts-btn btn-border">Student Login</a>
+                                <a href="Teacher-Login" class="rts-btn btn-primary">Teacher Login</a>
+                                <?php
+                            }
+                            ?>
                         </div>
                         <div class="menu-btn" id="menu-btn">
                             <svg width="20" height="16" viewBox="0 0 20 16" fill="none" xmlns="http://www.w3.org/2000/svg">

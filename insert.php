@@ -82,3 +82,24 @@ if($check_email == 0){
                     </script>";
     }
 }
+
+
+/*teacher login*/
+if(isset($_POST['teacher_login'])){
+    $email = $db_handle->checkValue($_POST['email']);
+    $password = $db_handle->checkValue($_POST['password']);
+
+    $fetch_pass = $db_handle->runQuery("select * from teacher_info where email = '$email'");
+    if(password_verify($password, $fetch_pass[0]['password'])){
+        $_SESSION['teacher_id'] = $fetch_pass[0]['teacher_id'];
+        echo "<script>
+                    document.cookie = 'alert = 1;';
+                    window.location.href='Teacher-Dashboard';
+                    </script>";
+    }else {
+        echo "<script>
+                    document.cookie = 'alert = 1;';
+                    window.location.href='Teacher-Login';
+                    </script>";
+    }
+}
