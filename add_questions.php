@@ -50,7 +50,7 @@ $fetch_teacher_info = $db_handle->runQuery("select * from teacher_info where tea
                             <h4>Exam Type: <?php echo $fetch_data[0]['type'];?></h4>
                             <h4>Question Set: <?php echo $fetch_data[0]['set_name'];?></h4>
                             <h6>Listening Test</h6>
-                            <form action="Insert" method="post" class="contact-page-form" enctype="multipart/form-data">
+                            <form action="Insert" method="post" class="contact-page-form">
                                 <input type="hidden" value="<?php echo $fetch_data[0]['set_id'];?>" name="set_id"/>
                                 <div class="row">
                                     <div class="col-lg-12 col-md-12 col-sm-12 col-12">
@@ -62,41 +62,41 @@ $fetch_teacher_info = $db_handle->runQuery("select * from teacher_info where tea
                                     <div class="col-lg-6 col-md-6 col-sm-12 col-12">
                                         <div class="single-input">
                                             <label for="name">Input Option A</label>
-                                            <input type="text" name="audio" placeholder="Option A"/>
+                                            <input type="text" name="optionA" placeholder="Option A"/>
                                         </div>
                                     </div>
                                     <div class="col-lg-6 col-md-6 col-sm-12 col-12">
                                         <div class="single-input">
                                             <label for="name">Input Option B</label>
-                                            <input type="text" name="audio" placeholder="Option B"/>
+                                            <input type="text" name="optionB" placeholder="Option B"/>
                                         </div>
                                     </div>
                                     <div class="col-lg-6 col-md-6 col-sm-12 col-12">
                                         <div class="single-input">
                                             <label for="name">Input Option C</label>
-                                            <input type="text" name="audio" placeholder="Option C"/>
+                                            <input type="text" name="optionC" placeholder="Option C"/>
                                         </div>
                                     </div>
                                     <div class="col-lg-6 col-md-6 col-sm-12 col-12">
                                         <div class="single-input">
                                             <label for="name">Input Option D</label>
-                                            <input type="text" name="audio" placeholder="Option D"/>
+                                            <input type="text" name="optionD" placeholder="Option D"/>
                                         </div>
                                     </div>
                                     <div class="col-lg-6 col-md-6 col-sm-12 col-12">
                                         <div class="single-input">
                                             <label for="name">Input Option E</label>
-                                            <input type="text" name="audio" placeholder="Option E"/>
+                                            <input type="text" name="optionE" placeholder="Option E"/>
                                         </div>
                                     </div>
                                     <div class="col-lg-12 col-md-12 col-sm-12 col-12">
                                         <div class="single-input">
-                                            <label for="name">Input Correct Answer</label>
-                                            <input type="text" name="audio" placeholder="Correct Answer"/>
+                                            <label for="name">Input Correct Answer Options (If multiple options are correct separate the answers by comma. For gaps please write the answers)</label>
+                                            <input type="text" name="answer" placeholder="Correct Answer" required/>
                                         </div>
                                     </div>
                                 </div>
-                                <button type="submit" name="upload_audio" class="rts-btn btn-primary mt--30">Next</button>
+                                <button type="submit" name="add_question" class="rts-btn btn-primary mt--30">Next</button>
                             </form>
                         </div>
                     </div>
@@ -349,10 +349,12 @@ $fetch_teacher_info = $db_handle->runQuery("select * from teacher_info where tea
 <?php include ('include/js.php');?>
 <script src="https://cdn.ckeditor.com/ckeditor5/39.0.0/classic/ckeditor.js"></script>
 <script>
-    ClassicEditor
-        .create(document.querySelector('#editor'))
+    ClassicEditor.create(document.querySelector('#editor'))
+        .then(editor => {
+            console.log('CKEditor initialized:', editor);
+        })
         .catch(error => {
-            console.error(error);
+            console.error('CKEditor initialization error:', error);
         });
 </script>
 
