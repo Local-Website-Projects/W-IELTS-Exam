@@ -9463,6 +9463,7 @@ input[type=password],
 input[type=email],
 input[type=number],
 input[type=tel],
+input[type=file],
 textarea {
   font-size: var(--font-size-b2);
   font-weight: 400;

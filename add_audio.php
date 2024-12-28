@@ -44,20 +44,23 @@ $fetch_teacher_info = $db_handle->runQuery("select * from teacher_info where tea
                 <div class="right-sidebar-dashboard">
                     <div class="row g-5">
                         <div class="col-lg-12 col-md-12 col-sm-12 col-12">
-                            <form action="Insert" method="post" class="contact-page-form">
+                            <?php
+                            $fetch_data = $db_handle->runQuery("select * from question_sets where teacher_id = {$_SESSION['teacher_id']} order by set_id DESC limit 1");
+                            ?>
+                            <h4>Exam Type: <?php echo $fetch_data[0]['type'];?></h4>
+                            <h4>Question Set: <?php echo $fetch_data[0]['set_name'];?></h4>
+                            <h6>Listening Test</h6>
+                            <form action="Insert" method="post" class="contact-page-form" enctype="multipart/form-data">
+                                <input type="hidden" value="<?php echo $fetch_data[0]['set_id'];?>" name="set_id"/>
                                 <div class="row">
                                     <div class="col-lg-12 col-md-12 col-sm-12 col-12">
                                         <div class="single-input">
-                                            <label for="name">Select Exam Type</label>
-                                           <select name="exam_type" required>
-                                               <option selected disabled>Select Exam Type</option>
-                                               <option value="Academic">Academic</option>
-                                               <option value="General">General</option>
-                                           </select>
+                                            <label for="name">Select Audio File</label>
+                                            <input type="file" name="audio" class="py-3"/>
                                         </div>
                                     </div>
                                 </div>
-                                <button type="submit" name="create_question_set" class="rts-btn btn-primary mt--30">Send Message</button>
+                                <button type="submit" name="upload_audio" class="rts-btn btn-primary mt--30">Next</button>
                             </form>
                         </div>
                     </div>

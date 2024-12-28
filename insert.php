@@ -103,3 +103,78 @@ if(isset($_POST['teacher_login'])){
                     </script>";
     }
 }
+
+
+/*creating question sets*/
+if(isset($_POST['create_question_set'])) {
+    $exam_type = $db_handle->checkValue($_POST['exam_type']);
+    $fetch_question_set = $db_handle->numRows("select * from question_sets where type = '$exam_type'");
+    $set_name = $exam_type . '-' . ($fetch_question_set + 1);
+    $insert_set = $db_handle->insertQuery("INSERT INTO `question_sets`(`teacher_id`, `type`, `set_name`, `inserted_at`) VALUES ('{$_SESSION['teacher_id']}','$exam_type','$set_name','$inserted_at')");
+    if ($insert_set) {
+        echo "<script>
+                    document.cookie = 'alert = 3;';
+                    window.location.href='Add-Audio';
+                    </script>";
+    } else {
+        echo "<script>
+                    document.cookie = 'alert = 5;';
+                    window.location.href='Add-Audio';
+                    </script>";
+    }
+}
+
+
+/*uploading listening exam audio*/
+if (isset($_POST['upload_audio'])) {
+    // Sanitize and validate input
+    $set_id = $db_handle->checkValue($_POST['set_id']);
+    $audio = '';
+
+    if (!empty($_FILES['audio']['name'])) {
+        $RandomAccountNumber = mt_rand(1, 99999);
+        $file_name = $RandomAccountNumber . "_" . basename($_FILES['audio']['name']);
+        $file_size = $_FILES['audio']['size'];
+        $file_tmp  = $_FILES['audio']['tmp_name'];
+        $file_type = strtolower(pathinfo($file_name, PATHINFO_EXTENSION));
+
+        // Allowed file types
+        $allowed_types = ['mp3', 'wav', 'aac'];
+
+        // Check for errors
+        if ($_FILES['audio']['error'] !== UPLOAD_ERR_OK) {
+            die("File upload error: " . $_FILES['audio']['error']);
+        }
+
+        if (!in_array($file_type, $allowed_types)) {
+            echo "<script>
+                    document.cookie = 'alert = 5;';
+                    window.location.href='Add-Questions';
+                  </script>";
+        } else {
+            // Attempt to move the uploaded file
+            if (move_uploaded_file($file_tmp, "audio/" . $file_name)) {
+                $audio = "audio/" . $file_name;
+
+                // Insert into database
+                $insert_audio = $db_handle->insertQuery("INSERT INTO `audio`(`file_name`, `set_id`, `inserted_at`) VALUES ('$audio', '$set_id', NOW())");
+
+                if ($insert_audio) {
+                    echo "<script>
+                            document.cookie = 'alert = 3;';
+                            window.location.href='Add-Questions';
+                          </script>";
+                } else {
+                    echo "<script>
+                            document.cookie = 'alert = 5;';
+                            window.location.href='Add-Questions';
+                          </script>";
+                }
+            } else {
+                die("Failed to move uploaded file.");
+            }
+        }
+    } else {
+        die("No file selected.");
+    }
+}
