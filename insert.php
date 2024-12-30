@@ -189,9 +189,10 @@ $optionD = $db_handle->checkValue($_POST['optionD']);
 $optionE = $db_handle->checkValue($_POST['optionE']);
 $answer = $db_handle->checkValue($_POST['answer']);
 $set_id = $db_handle->checkValue($_POST['set_id']);
+$passage = $db_handle->checkValue($_POST['passage']);
 
-$insert_question = $db_handle->insertQuery("INSERT INTO `questions`(`question`, `optionA`, `optionB`, `optionC`, `optionD`, `optionE`, `correct_answer`, `inserted_at`,`question_set_id`) 
-VALUES ('$question','$optionA','$optionB','$optionC','$optionD','$optionE','$answer','$inserted_at','$set_id')");
+$insert_question = $db_handle->insertQuery("INSERT INTO `questions`(`question`, `optionA`, `optionB`, `optionC`, `optionD`, `optionE`, `correct_answer`, `inserted_at`,`question_set_id`,`instruction`) 
+VALUES ('$question','$optionA','$optionB','$optionC','$optionD','$optionE','$answer','$inserted_at','$set_id','$passage')");
 
 if($insert_question){
     echo "<script>
@@ -204,4 +205,32 @@ if($insert_question){
               window.location.href='Add-Questions';
                           </script>";
 }
+}
+
+
+if(isset($_POST['add_incomplete_question'])){
+    $question = $db_handle->checkValue($_POST['question']);
+    $optionA = $db_handle->checkValue($_POST['optionA']);
+    $optionB = $db_handle->checkValue($_POST['optionB']);
+    $optionC = $db_handle->checkValue($_POST['optionC']);
+    $optionD = $db_handle->checkValue($_POST['optionD']);
+    $optionE = $db_handle->checkValue($_POST['optionE']);
+    $answer = $db_handle->checkValue($_POST['answer']);
+    $set_id = $db_handle->checkValue($_POST['set_id']);
+    $passage = $db_handle->checkValue($_POST['passage']);
+
+    $insert_question = $db_handle->insertQuery("INSERT INTO `questions`(`question`, `optionA`, `optionB`, `optionC`, `optionD`, `optionE`, `correct_answer`, `inserted_at`,`question_set_id`,`instruction`) 
+VALUES ('$question','$optionA','$optionB','$optionC','$optionD','$optionE','$answer','$inserted_at','$set_id','$passage')");
+
+    if($insert_question){
+        echo "<script>
+              document.cookie = 'alert = 3;';
+              window.location.href='Add-Incomplete-Questions?question_set=$set_id';
+                          </script>";
+    } else {
+        echo "<script>
+              document.cookie = 'alert = 5;';
+              window.location.href='Add-Incomplete-Questions';
+                          </script>";
+    }
 }

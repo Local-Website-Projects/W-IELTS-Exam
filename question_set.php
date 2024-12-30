@@ -44,65 +44,27 @@ $fetch_teacher_info = $db_handle->runQuery("select * from teacher_info where tea
                 <div class="right-sidebar-dashboard">
                     <div class="row g-5">
                         <div class="col-lg-12 col-md-12 col-sm-12 col-12">
-                            <?php
-                            $fetch_data = $db_handle->runQuery("select * from question_sets where teacher_id = {$_SESSION['teacher_id']} order by set_id DESC limit 1");
-                            ?>
-                            <h4>Exam Type: <?php echo $fetch_data[0]['type'];?></h4>
-                            <h4>Question Set: <?php echo $fetch_data[0]['set_name'];?></h4>
-                            <h6>Listening Test</h6>
-                            <form action="Insert" method="post" class="contact-page-form">
-                                <input type="hidden" value="<?php echo $fetch_data[0]['set_id'];?>" name="set_id"/>
+                            <form action="Add-Incomplete-Questions" method="post" class="contact-page-form">
                                 <div class="row">
                                     <div class="col-lg-12 col-md-12 col-sm-12 col-12">
                                         <div class="single-input">
-                                            <label for="name">Input Suggestions/Passage/Instructions if necessary</label>
-                                            <textarea id="passage" name="passage"></textarea>
-                                        </div>
-                                    </div>
-                                    <div class="col-lg-12 col-md-12 col-sm-12 col-12">
-                                        <div class="single-input">
-                                            <label for="name">Input Question No: <?php echo '1';?></label>
-                                            <textarea id="editor" name="question"></textarea>
-                                        </div>
-                                    </div>
-                                    <div class="col-lg-6 col-md-6 col-sm-12 col-12">
-                                        <div class="single-input">
-                                            <label for="name">Input Option A</label>
-                                            <input type="text" name="optionA" placeholder="Option A"/>
-                                        </div>
-                                    </div>
-                                    <div class="col-lg-6 col-md-6 col-sm-12 col-12">
-                                        <div class="single-input">
-                                            <label for="name">Input Option B</label>
-                                            <input type="text" name="optionB" placeholder="Option B"/>
-                                        </div>
-                                    </div>
-                                    <div class="col-lg-6 col-md-6 col-sm-12 col-12">
-                                        <div class="single-input">
-                                            <label for="name">Input Option C</label>
-                                            <input type="text" name="optionC" placeholder="Option C"/>
-                                        </div>
-                                    </div>
-                                    <div class="col-lg-6 col-md-6 col-sm-12 col-12">
-                                        <div class="single-input">
-                                            <label for="name">Input Option D</label>
-                                            <input type="text" name="optionD" placeholder="Option D"/>
-                                        </div>
-                                    </div>
-                                    <div class="col-lg-6 col-md-6 col-sm-12 col-12">
-                                        <div class="single-input">
-                                            <label for="name">Input Option E</label>
-                                            <input type="text" name="optionE" placeholder="Option E"/>
-                                        </div>
-                                    </div>
-                                    <div class="col-lg-12 col-md-12 col-sm-12 col-12">
-                                        <div class="single-input">
-                                            <label for="name">Input Correct Answer Options (If multiple options are correct separate the answers by comma. For gaps please write the answers)</label>
-                                            <input type="text" name="answer" placeholder="Correct Answer" required/>
+                                            <label for="name">Select Form Created Question Sets</label>
+                                            <select name="set_id" required>
+                                                <option selected disabled>Select the Question Set You Want to Add Question</option>
+                                                <?php
+                                                $fetch_question_set = $db_handle->runQuery("SELECT * FROM `questions` JOIN `question_sets` ON questions.question_set_id = question_sets.set_id GROUP BY question_sets.set_id HAVING COUNT(questions.question_id) < 120 and question_sets.teacher_id = {$_SESSION['teacher_id']} ORDER BY question_sets.set_id DESC");
+                                                $fetch_question_set_no = $db_handle->numRows("SELECT * FROM `questions` JOIN `question_sets` ON questions.question_set_id = question_sets.set_id GROUP BY question_sets.set_id HAVING COUNT(questions.question_id) < 120 and question_sets.teacher_id = {$_SESSION['teacher_id']} ORDER BY question_sets.set_id DESC");
+                                                for ($i=0; $i<$fetch_question_set_no; $i++){
+                                                    ?>
+                                                    <option value="<?php echo $fetch_question_set[$i]['set_id'];?>"><?php echo $fetch_question_set[$i]['set_name'];?></option>
+                                                    <?php
+                                                }
+                                                ?>
+                                            </select>
                                         </div>
                                     </div>
                                 </div>
-                                <button type="submit" name="add_question" class="rts-btn btn-primary mt--30">Next</button>
+                                <button type="submit" name="selected_question_set" class="rts-btn btn-primary mt--30">Send Message</button>
                             </form>
                         </div>
                     </div>
@@ -353,23 +315,6 @@ $fetch_teacher_info = $db_handle->runQuery("select * from teacher_info where tea
 
 <!-- all scripts -->
 <?php include ('include/js.php');?>
-<script src="https://cdn.ckeditor.com/ckeditor5/39.0.0/classic/ckeditor.js"></script>
-<script>
-    ClassicEditor.create(document.querySelector('#editor'))
-        .then(editor => {
-            console.log('CKEditor initialized:', editor);
-        })
-        .catch(error => {
-            console.error('CKEditor initialization error:', error);
-        });
-    ClassicEditor.create(document.querySelector('#passage'))
-        .then(editor => {
-            console.log('CKEditor initialized:', editor);
-        })
-        .catch(error => {
-            console.error('CKEditor initialization error:', error);
-        });
-</script>
 
 </body>
 

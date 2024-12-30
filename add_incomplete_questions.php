@@ -10,6 +10,16 @@ if(!isset($_SESSION['teacher_id'])){
                     window.location.href='Teacher-Login';
                     </script>";
 }
+$question_set = 'none';
+
+
+if(isset($_POST['selected_question_set'])){
+    $question_set = $db_handle->checkValue($_POST['set_id']);
+}
+
+if(isset($_GET['question_set'])){
+   echo $question_set = $_GET['question_set'];
+}
 
 $fetch_teacher_info = $db_handle->runQuery("select * from teacher_info where teacher_id = {$_SESSION['teacher_id']}");
 ?>
@@ -45,7 +55,7 @@ $fetch_teacher_info = $db_handle->runQuery("select * from teacher_info where tea
                     <div class="row g-5">
                         <div class="col-lg-12 col-md-12 col-sm-12 col-12">
                             <?php
-                            $fetch_data = $db_handle->runQuery("select * from question_sets where teacher_id = {$_SESSION['teacher_id']} order by set_id DESC limit 1");
+                            $fetch_data = $db_handle->runQuery("select * from question_sets where teacher_id = {$_SESSION['teacher_id']} and set_id = '$question_set'");
                             ?>
                             <h4>Exam Type: <?php echo $fetch_data[0]['type'];?></h4>
                             <h4>Question Set: <?php echo $fetch_data[0]['set_name'];?></h4>
@@ -61,7 +71,10 @@ $fetch_teacher_info = $db_handle->runQuery("select * from teacher_info where tea
                                     </div>
                                     <div class="col-lg-12 col-md-12 col-sm-12 col-12">
                                         <div class="single-input">
-                                            <label for="name">Input Question No: <?php echo '1';?></label>
+                                            <label for="name">>Input Question No: <?php
+                                                $fetch_no_question = $db_handle->numRows("select question_id from questions where question_set_id = '$question_set'");
+                                                echo $fetch_no_question;
+                                                ?></label>
                                             <textarea id="editor" name="question"></textarea>
                                         </div>
                                     </div>
@@ -102,7 +115,7 @@ $fetch_teacher_info = $db_handle->runQuery("select * from teacher_info where tea
                                         </div>
                                     </div>
                                 </div>
-                                <button type="submit" name="add_question" class="rts-btn btn-primary mt--30">Next</button>
+                                <button type="submit" name="add_incomplete_question" class="rts-btn btn-primary mt--30">Next</button>
                             </form>
                         </div>
                     </div>

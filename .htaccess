@@ -13,6 +13,8 @@ RewriteRule ^Logout$ logout.php [NE,L]
 RewriteRule ^Create-Exam$ create_exam.php [NE,L]
 RewriteRule ^Add-Audio$ add_audio.php [NE,L]
 RewriteRule ^Add-Questions$ add_questions.php [NE,L]
+RewriteRule ^Question-Set$ question_set.php [NE,L]
+RewriteRule ^Add-Incomplete-Questions$ add_incomplete_questions.php [NE,L]
 
 
 
